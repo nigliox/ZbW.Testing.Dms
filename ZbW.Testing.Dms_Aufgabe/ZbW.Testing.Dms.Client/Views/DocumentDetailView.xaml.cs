@@ -15,5 +15,10 @@
             InitializeComponent();
             DataContext = new DocumentDetailViewModel(benutzer, navigateBack);
         }
+
+        private void CheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ZbW.Testing.Dms.Client.Views
+﻿using System.Windows;
+
+namespace ZbW.Testing.Dms.Client.Views
 {
     using System.Windows.Controls;
 
@@ -9,10 +11,14 @@
     /// </summary>
     public partial class SearchView : UserControl
     {
+        
+
         public SearchView()
         {
             InitializeComponent();
             DataContext = new SearchViewModel();
+            
         }
+
     }
 }

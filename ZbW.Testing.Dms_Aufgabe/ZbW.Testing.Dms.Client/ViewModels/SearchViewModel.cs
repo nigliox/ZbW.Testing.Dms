@@ -1,4 +1,10 @@
-﻿namespace ZbW.Testing.Dms.Client.ViewModels
+﻿using System.Collections;
+using System.Configuration;
+using System.IO;
+using System.Windows.Data;
+using ZbW.Testing.Dms.Client.Services;
+
+namespace ZbW.Testing.Dms.Client.ViewModels
 {
     using System.Collections.Generic;
 
@@ -27,7 +33,14 @@
             CmdSuchen = new DelegateCommand(OnCmdSuchen);
             CmdReset = new DelegateCommand(OnCmdReset);
             CmdOeffnen = new DelegateCommand(OnCmdOeffnen, OnCanCmdOeffnen);
+            this.MetaDataRepository = new MetaDataRepository(ConfigurationManager.AppSettings["RepositoryDir"]);
+            this.MetaDataService = new MetaDataService(MetaDataRepository);
+
         }
+
+        public MetaDataService MetaDataService { get; set; }
+
+        public MetaDataRepository MetaDataRepository { get; set; }
 
         public DelegateCommand CmdOeffnen { get; }
 
@@ -110,17 +123,40 @@
 
         private void OnCmdOeffnen()
         {
-            // TODO: Add your Code here
+            //ToDo
+
         }
 
         private void OnCmdSuchen()
         {
-            // TODO: Add your Code here
+            this.FilteredMetadataItems = MetaDataRepository.SearchMetaDataItemsAndAddToList();
+
+            if (_suchbegriff!=null|| _selectedTypItem!=null)
+            {
+                if (_suchbegriff != null && _selectedTypItem == null)
+                {
+                    FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_suchbegriff.ToUpper());
+
+                }
+                else if(_selectedTypItem!=null && _suchbegriff == null)
+                {
+                    FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_selectedTypItem);
+                }
+                else if (_selectedTypItem != null && _selectedTypItem != null)
+                {
+                    FilteredMetadataItems = MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff.ToUpper(), _selectedTypItem);
+                }
+
+
+            }
+
         }
 
         private void OnCmdReset()
         {
-            // TODO: Add your Code here
+            //ToDo
+            this._filteredMetadataItems.Clear();
+            
         }
     }
 }
