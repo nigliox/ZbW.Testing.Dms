@@ -1,19 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Windows.Data;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+using Prism.Commands;
+using Prism.Mvvm;
+using ZbW.Testing.Dms.Client.Model;
+using ZbW.Testing.Dms.Client.Repositories;
 using ZbW.Testing.Dms.Client.Services;
 
 namespace ZbW.Testing.Dms.Client.ViewModels
 {
-    using System.Collections.Generic;
-
-    using Prism.Commands;
-    using Prism.Mvvm;
-
-    using ZbW.Testing.Dms.Client.Model;
-    using ZbW.Testing.Dms.Client.Repositories;
-
     internal class SearchViewModel : BindableBase
     {
         private List<MetadataItem> _filteredMetadataItems;
@@ -33,9 +32,8 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             CmdSuchen = new DelegateCommand(OnCmdSuchen);
             CmdReset = new DelegateCommand(OnCmdReset);
             CmdOeffnen = new DelegateCommand(OnCmdOeffnen, OnCanCmdOeffnen);
-            this.MetaDataRepository = new MetaDataRepository(ConfigurationManager.AppSettings["RepositoryDir"]);
-            this.MetaDataService = new MetaDataService(MetaDataRepository);
-
+            MetaDataRepository = new MetaDataRepository(ConfigurationManager.AppSettings["RepositoryDir"]);
+            MetaDataService = new MetaDataService(MetaDataRepository);
         }
 
         public MetaDataService MetaDataService { get; set; }
@@ -48,71 +46,44 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         public DelegateCommand CmdReset { get; }
 
+        [ExcludeFromCodeCoverage]
         public string Suchbegriff
         {
-            get
-            {
-                return _suchbegriff;
-            }
+            get => _suchbegriff;
 
-            set
-            {
-                SetProperty(ref _suchbegriff, value);
-            }
+            set => SetProperty(ref _suchbegriff, value);
         }
 
+        [ExcludeFromCodeCoverage]
         public List<string> TypItems
         {
-            get
-            {
-                return _typItems;
-            }
+            get => _typItems;
 
-            set
-            {
-                SetProperty(ref _typItems, value);
-            }
+            set => SetProperty(ref _typItems, value);
         }
 
+        [ExcludeFromCodeCoverage]
         public string SelectedTypItem
         {
-            get
-            {
-                return _selectedTypItem;
-            }
+            get => _selectedTypItem;
 
-            set
-            {
-                SetProperty(ref _selectedTypItem, value);
-            }
+            set => SetProperty(ref _selectedTypItem, value);
         }
-
+        [ExcludeFromCodeCoverage]
         public List<MetadataItem> FilteredMetadataItems
         {
-            get
-            {
-                return _filteredMetadataItems;
-            }
+            get => _filteredMetadataItems;
 
-            set
-            {
-                SetProperty(ref _filteredMetadataItems, value);
-            }
+            set => SetProperty(ref _filteredMetadataItems, value);
         }
-
+        [ExcludeFromCodeCoverage]
         public MetadataItem SelectedMetadataItem
         {
-            get
-            {
-                return _selectedMetadataItem;
-            }
+            get => _selectedMetadataItem;
 
             set
             {
-                if (SetProperty(ref _selectedMetadataItem, value))
-                {
-                    CmdOeffnen.RaiseCanExecuteChanged();
-                }
+                if (SetProperty(ref _selectedMetadataItem, value)) CmdOeffnen.RaiseCanExecuteChanged();
             }
         }
 
@@ -123,40 +94,41 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         private void OnCmdOeffnen()
         {
-            //ToDo
+            var newPath = SelectedMetadataItem.NewFilePath;
 
+
+            try
+            {
+                Process.Start(newPath);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Das File wurde nicht gefunden");
+                throw;
+            }
         }
 
         private void OnCmdSuchen()
         {
-            this.FilteredMetadataItems = MetaDataRepository.SearchMetaDataItemsAndAddToList();
+            FilteredMetadataItems = MetaDataRepository.SearchMetaDataItemsAndAddToList();
 
-            if (_suchbegriff!=null|| _selectedTypItem!=null)
+            if (_suchbegriff != null || _selectedTypItem != null)
             {
                 if (_suchbegriff != null && _selectedTypItem == null)
-                {
                     FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_suchbegriff.ToUpper());
-
-                }
-                else if(_selectedTypItem!=null && _suchbegriff == null)
-                {
+                else if (_selectedTypItem != null && _suchbegriff == null)
                     FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_selectedTypItem);
-                }
                 else if (_selectedTypItem != null && _selectedTypItem != null)
-                {
-                    FilteredMetadataItems = MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff.ToUpper(), _selectedTypItem);
-                }
-
-
+                    FilteredMetadataItems =
+                        MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff.ToUpper(), _selectedTypItem);
             }
-
         }
 
         private void OnCmdReset()
         {
-            //ToDo
-            this._filteredMetadataItems.Clear();
             
+            FilteredMetadataItems.Clear();
+  
         }
     }
 }

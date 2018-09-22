@@ -37,14 +37,16 @@
             <Button Grid.Row="1" Grid.Column="5" Command="{Binding CmdReset}" Content="Reset"/>
         </Grid>
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding FilteredMetadataItems}"
+                  ItemsSource="{Binding FilteredMetadataItems, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding SelectedMetadataItem}"
-                  AutoGenerateColumns="True">
-            <!--TODO: Remove AutoGenerateColumns="True" and specify your own columns -->
-            <!--<DataGrid.Columns>
+                  AutoGenerateColumns="false">
+           
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="Typ" Binding="{Binding Typ}"/>
                 <DataGridTextColumn Header="Bezeichnung" Binding="{Binding Bezeichnung}"/>
-            </DataGrid.Columns>-->
+                <DataGridTextColumn Header="Guid" Binding="{Binding Guid}"/>
+                <DataGridTextColumn Header="Path" Binding="{Binding NewFilePath}"/>
+            </DataGrid.Columns>
         </DataGrid>
 
         <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Command="{Binding CmdOeffnen}" Content="Öffnen" Width="100"/>

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 
 namespace ZbW.Testing.Dms.Client.Views
 {
@@ -12,7 +13,7 @@ namespace ZbW.Testing.Dms.Client.Views
     public partial class SearchView : UserControl
     {
         
-
+        [ExcludeFromCodeCoverage]
         public SearchView()
         {
             InitializeComponent();

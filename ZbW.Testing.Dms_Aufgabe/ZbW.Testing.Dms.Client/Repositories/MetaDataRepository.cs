@@ -24,6 +24,12 @@ namespace ZbW.Testing.Dms.Client.Repositories
             var folderName = data.ValutaDatum.Year;
             Directory.CreateDirectory(this.FolderPath + "\\" + folderName);
 
+            File.Copy(data.FilePath,
+                FolderPath + "\\" + data.ValutaDatum.Year + "\\" + data.Guid + "_Content" + Path.GetExtension(data.FilePath));
+
+            data.NewFilePath = FolderPath + "\\" + data.ValutaDatum.Year + "\\" + data.Guid + "_Content" + Path.GetExtension(data.FilePath);
+
+
             using (var metaFile = File.Create(FolderPath + "\\" + folderName + "\\" + data.Guid + "_Metadata.xml"))
             {
                 System.Xml.Serialization.XmlSerializer writer =
@@ -33,10 +39,10 @@ namespace ZbW.Testing.Dms.Client.Repositories
             }
 
 
-            File.Copy(data.FilePath,
-                FolderPath + "\\" + data.ValutaDatum.Year + "\\" + data.Guid + "_Content" + Path.GetExtension(data.FilePath));
-
+           
         }
+
+        
 
         public List<MetadataItem> SearchMetaDataItemsAndAddToList()
         {

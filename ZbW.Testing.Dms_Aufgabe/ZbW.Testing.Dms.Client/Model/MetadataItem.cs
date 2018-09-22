@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ZbW.Testing.Dms.Client.Model
 {
@@ -16,8 +17,11 @@ namespace ZbW.Testing.Dms.Client.Model
 
         public string FilePath { get; set; }
 
+        public string NewFilePath { get; set; }
 
 
+
+        [ExcludeFromCodeCoverage]
         public MetadataItem()
         {
 
@@ -33,6 +37,7 @@ namespace ZbW.Testing.Dms.Client.Model
 
             this.FilePath = FilePath;
 
+            this.NewFilePath = NewFilePath;
 
 
         }

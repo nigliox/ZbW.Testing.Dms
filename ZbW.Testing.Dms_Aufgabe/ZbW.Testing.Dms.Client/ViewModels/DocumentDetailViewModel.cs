@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows;
 using System.Xml.Linq;
@@ -52,6 +53,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         public MetaDataRepository MetaDataRepository { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public string Stichwoerter
         {
             get { return _stichwoerter; }
@@ -59,6 +61,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set { SetProperty(ref _stichwoerter, value); }
         }
 
+        [ExcludeFromCodeCoverage]
         public string Bezeichnung
         {
             get { return _bezeichnung; }
@@ -66,6 +69,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set { SetProperty(ref _bezeichnung, value); }
         }
 
+        [ExcludeFromCodeCoverage]
         public List<string> TypItems
         {
             get { return _typItems; }
@@ -142,8 +146,8 @@ namespace ZbW.Testing.Dms.Client.ViewModels
                 Typ = _selectedTypItem.ToString(),
                 ValutaDatum = _valutaDatum.Value,
                 Guid = Guid.NewGuid(),
-                FilePath = _filePath
-  
+                FilePath = _filePath,
+                NewFilePath = _newFilePath
                
             };
 
@@ -154,7 +158,10 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             {
                 File.Delete(_filePath);
 
-                MessageBox.Show("Das Dokument wurde erfolgreich hinzugefügt und lokal gelöscht");
+                const string message = "Das Dokument wird gelöscht! Sind Sie Sicher?? ";
+                const string caption = "Form Clsing";
+
+                MessageBox.Show(message,caption,MessageBoxButton.YesNo);
             }
 
             _navigateBack();
