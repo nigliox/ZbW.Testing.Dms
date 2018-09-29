@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using ZbW.Testing.Dms.Client.Model;
 
 namespace ZbW.Testing.Dms.Client.Repositories
 {
-    class MetaDataRepository
+    public class MetaDataRepository : IMetaDataRepository
     {
         public string FolderPath { get; set; }
 
@@ -44,10 +45,10 @@ namespace ZbW.Testing.Dms.Client.Repositories
 
         
 
-        public List<MetadataItem> SearchMetaDataItemsAndAddToList()
+        public ObservableCollection<MetadataItem> SearchMetaDataItemsAndAddToList()
         {
             var directories = Directory.GetDirectories(this.FolderPath);
-            var foundItems = new List<MetadataItem>();
+            var foundItems = new ObservableCollection<MetadataItem>();
             foreach (var directory in directories)
             {
 

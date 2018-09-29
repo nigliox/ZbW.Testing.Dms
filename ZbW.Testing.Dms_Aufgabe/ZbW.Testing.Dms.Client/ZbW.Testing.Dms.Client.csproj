@@ -71,9 +71,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\MetadataItem.cs" />
+    <Compile Include="ProcessTestable.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Repositories\ComboBoxItems.cs" />
+    <Compile Include="Repositories\IMetaDataRepository.cs" />
     <Compile Include="Repositories\MetaDataRepository.cs" />
+    <Compile Include="Services\IMetaDataService.cs" />
     <Compile Include="Services\MetaDataService.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

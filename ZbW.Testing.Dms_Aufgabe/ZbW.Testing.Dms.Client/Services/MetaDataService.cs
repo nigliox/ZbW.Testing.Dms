@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,28 +10,28 @@ using ZbW.Testing.Dms.Client.Repositories;
 
 namespace ZbW.Testing.Dms.Client.Services
 {
-    class MetaDataService
+    public class MetaDataService : IMetaDataService
     {
 
-        public MetaDataRepository MetaDataRepository { get; set; }
+        public IMetaDataRepository MetaDataRepository { get; set; }
 
-
-        public MetaDataService(MetaDataRepository data)
+     
+        public MetaDataService(IMetaDataRepository data)
         {
             MetaDataRepository = data;
 
         }
 
 
-        public List<MetadataItem> SearchItemsByKeywordOrTyp(string value)
+        public ObservableCollection<MetadataItem> SearchItemsByKeywordOrTyp(string value)
         {
-            var allItems = new List<MetadataItem>();
-            allItems = this.MetaDataRepository.SearchMetaDataItemsAndAddToList();
-            var foundItems = new List<MetadataItem>();
+            var allItems = this.MetaDataRepository.SearchMetaDataItemsAndAddToList();
+            
+            var foundItems = new ObservableCollection<MetadataItem>();
 
             foreach (var item in allItems)
             {
-                if (item.Bezeichnung.Contains(value) || item.Typ.Contains(value))
+                if (item.Bezeichnung.ToLower().Contains(value.ToLower()) || item.Typ.Contains(value))
                 {
                     foundItems.Add(item);
                 }
@@ -40,16 +42,16 @@ namespace ZbW.Testing.Dms.Client.Services
 
         }
 
-        public List<MetadataItem> SearchItemsByKeywordAndTyp(string keyword, string typ)
+        public ObservableCollection<MetadataItem> SearchItemsByKeywordAndTyp(string keyword, string typ)
         {
-            var allItems = new List<MetadataItem>();
-            allItems = this.MetaDataRepository.SearchMetaDataItemsAndAddToList();
-            var foundItems= new List<MetadataItem>();
+            var allItems = this.MetaDataRepository.SearchMetaDataItemsAndAddToList();
+
+            var foundItems= new ObservableCollection<MetadataItem>();
             
 
             foreach (var item in allItems)
             {
-                if (item.Bezeichnung.Contains(keyword) && item.Typ.Contains(typ))
+                if (item.Bezeichnung.ToLower().Contains(keyword) && item.Typ.Contains(typ))
                 {
                     foundItems.Add(item);
                 }

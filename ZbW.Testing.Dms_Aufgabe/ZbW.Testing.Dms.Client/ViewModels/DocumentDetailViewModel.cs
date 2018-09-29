@@ -51,6 +51,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             this.MetaDataRepository = new MetaDataRepository(ConfigurationManager.AppSettings["RepositoryDir"]);
         }
 
+        [ExcludeFromCodeCoverage]
         public MetaDataRepository MetaDataRepository { get; set; }
 
         [ExcludeFromCodeCoverage]
@@ -76,7 +77,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
             set { SetProperty(ref _typItems, value); }
         }
-
+        [ExcludeFromCodeCoverage]
         public string SelectedTypItem
         {
             get { return _selectedTypItem; }
@@ -84,6 +85,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set { SetProperty(ref _selectedTypItem, value); }
         }
 
+        [ExcludeFromCodeCoverage]
         public DateTime Erfassungsdatum
         {
             get { return _erfassungsdatum; }
@@ -91,6 +93,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set { SetProperty(ref _erfassungsdatum, value); }
         }
 
+        [ExcludeFromCodeCoverage]
         public string Benutzer
         {
             get { return _benutzer; }
@@ -102,6 +105,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         public DelegateCommand CmdSpeichern { get; }
 
+        [ExcludeFromCodeCoverage]
         public DateTime? ValutaDatum
         {
             get { return _valutaDatum; }
@@ -109,6 +113,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set { SetProperty(ref _valutaDatum, value); }
         }
 
+        [ExcludeFromCodeCoverage]
         public bool IsRemoveFileEnabled
         {
             get { return _isRemoveFileEnabled; }
@@ -116,6 +121,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set { SetProperty(ref _isRemoveFileEnabled, value); }
         }
 
+        [ExcludeFromCodeCoverage]
         private void OnCmdDurchsuchen()
         {
             var openFileDialog = new OpenFileDialog();

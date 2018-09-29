@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 {
     internal class SearchViewModel : BindableBase
     {
-        private List<MetadataItem> _filteredMetadataItems;
+        private ObservableCollection<MetadataItem> _filteredMetadataItems;
 
         private MetadataItem _selectedMetadataItem;
 
@@ -25,20 +26,21 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         private List<string> _typItems;
 
-        public SearchViewModel()
+     
+
+        public SearchViewModel(IMetaDataService service)
         {
             TypItems = ComboBoxItems.Typ;
 
             CmdSuchen = new DelegateCommand(OnCmdSuchen);
             CmdReset = new DelegateCommand(OnCmdReset);
             CmdOeffnen = new DelegateCommand(OnCmdOeffnen, OnCanCmdOeffnen);
-            MetaDataRepository = new MetaDataRepository(ConfigurationManager.AppSettings["RepositoryDir"]);
-            MetaDataService = new MetaDataService(MetaDataRepository);
+           
+            MetaDataService = service;
+            
         }
 
-        public MetaDataService MetaDataService { get; set; }
-
-        public MetaDataRepository MetaDataRepository { get; set; }
+        public IMetaDataService MetaDataService { get; set; }
 
         public DelegateCommand CmdOeffnen { get; }
 
@@ -70,7 +72,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             set => SetProperty(ref _selectedTypItem, value);
         }
         [ExcludeFromCodeCoverage]
-        public List<MetadataItem> FilteredMetadataItems
+        public ObservableCollection<MetadataItem> FilteredMetadataItems
         {
             get => _filteredMetadataItems;
 
@@ -87,6 +89,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private bool OnCanCmdOeffnen()
         {
             return SelectedMetadataItem != null;
@@ -94,40 +97,52 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         private void OnCmdOeffnen()
         {
-            var newPath = SelectedMetadataItem.NewFilePath;
-
+            var process = new ProcessTestable();
+            var path = SelectedMetadataItem.NewFilePath;
 
             try
             {
-                Process.Start(newPath);
+                process.Open(path);
+                
             }
             catch (Exception e)
             {
                 MessageBox.Show("Das File wurde nicht gefunden");
-                throw;
+                throw e;
             }
         }
 
         private void OnCmdSuchen()
-        {
-            FilteredMetadataItems = MetaDataRepository.SearchMetaDataItemsAndAddToList();
-
-            if (_suchbegriff != null || _selectedTypItem != null)
+        { 
+           
+            if (_suchbegriff == null && _selectedTypItem == null)
             {
-                if (_suchbegriff != null && _selectedTypItem == null)
-                    FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_suchbegriff.ToUpper());
-                else if (_selectedTypItem != null && _suchbegriff == null)
-                    FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_selectedTypItem);
-                else if (_selectedTypItem != null && _selectedTypItem != null)
-                    FilteredMetadataItems =
-                        MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff.ToUpper(), _selectedTypItem);
+                MessageBox.Show("Überprüfen Sie Ihre Eingabe");
+                return;
             }
+
+
+            if (_suchbegriff != null && _selectedTypItem == null)
+            {
+                FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_suchbegriff);
+                return;
+            }
+
+            if (_selectedTypItem != null && _suchbegriff == null)
+            {
+                FilteredMetadataItems = MetaDataService.SearchItemsByKeywordOrTyp(_selectedTypItem);
+                return;
+            }
+
+           
+                FilteredMetadataItems = MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff, _selectedTypItem);
         }
 
         private void OnCmdReset()
         {
             
             FilteredMetadataItems.Clear();
+
   
         }
     }
