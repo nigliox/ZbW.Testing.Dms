@@ -51,4 +51,4 @@ using System.Windows;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: InternalsVisibleTo("ZbW.Testing.Dms.Client.Tests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

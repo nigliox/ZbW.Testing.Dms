@@ -70,6 +70,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileTestable.cs" />
+    <Compile Include="MessageBoxTestable.cs" />
     <Compile Include="Model\MetadataItem.cs" />
     <Compile Include="ProcessTestable.cs" />
     <Compile Include="Properties\Annotations.cs" />

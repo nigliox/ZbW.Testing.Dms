@@ -85,5 +85,72 @@ namespace ZbW.Testing.Dms.Client.Tests
 
 
         }
+
+        [Test]
+        public void SearchItemsByKeywordAndTypNoInputShouldReturnEnEmptyList()
+        {
+            //arrange
+
+            var repoMock = A.Fake<IMetaDataRepository>();
+
+            var sut = new MetaDataService(repoMock);
+
+            //act
+            var result = sut.SearchItemsByKeywordAndTyp(null,null);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsInstanceOf(typeof(ObservableCollection<MetadataItem>), result);
+            Assert.That(result.Count == 0);
+
+        }
+
+        [Test]
+
+        public void SearchItemsByKeywordAndTypBothInputShouldReturnTwoObjects()
+        {
+            //arrange
+
+            var testList = new ObservableCollection<MetadataItem>
+            {
+                new MetadataItem()
+                {
+                    Bezeichnung = "hallo",
+                    Typ = "Vertrag"
+
+
+                },
+                new MetadataItem()
+                {
+                    Bezeichnung = "Samy",
+                    Typ = "Quittungen"
+                },
+
+                new MetadataItem()
+                {
+                    Bezeichnung = "Hallo Welt",
+                    Typ = "Vertrag"
+                }
+            };
+
+
+            var repoMock = A.Fake<IMetaDataRepository>();
+
+            A.CallTo(() => repoMock.SearchMetaDataItemsAndAddToList()).Returns(testList);
+
+            var sut = new MetaDataService(repoMock);
+
+            //act
+
+            var result = sut.SearchItemsByKeywordAndTyp("Hallo","Vertrag");
+
+            //assert
+
+            Assert.That(result.Count == 2);
+            Assert.That(result[0] == testList[0]);
+            Assert.That(result[1] == testList[2]);
+
+
+        }
     }
 }

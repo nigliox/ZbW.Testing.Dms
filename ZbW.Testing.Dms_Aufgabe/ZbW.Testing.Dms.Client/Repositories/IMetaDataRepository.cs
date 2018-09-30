@@ -5,6 +5,7 @@ namespace ZbW.Testing.Dms.Client.Repositories
 {
     public interface IMetaDataRepository
     {
+        string FolderPath { get; set; }
         void StoreMetaDataItem(MetadataItem data);
         ObservableCollection<MetadataItem> SearchMetaDataItemsAndAddToList();
     }

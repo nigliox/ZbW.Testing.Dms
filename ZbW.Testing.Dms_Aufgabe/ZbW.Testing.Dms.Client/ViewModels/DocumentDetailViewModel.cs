@@ -135,9 +135,11 @@ namespace ZbW.Testing.Dms.Client.ViewModels
 
         private void OnCmdSpeichern()
         {
-            if (_filePath == "" || !_valutaDatum.HasValue || _bezeichnung == "" || _selectedTypItem == null)
+            if (_filePath == "" || !_valutaDatum.HasValue || string.IsNullOrEmpty(_bezeichnung) || _selectedTypItem == null)
             {
-                MessageBox.Show("Es müssen alle Pflichtfelder ausgefüllt werden!");
+                var msg = new MessageBoxTestable();
+
+                msg.ShowMessage("Es müssen alle Pflichtfelder ausgefüllt werden!");
                 return;
             }
 
@@ -147,8 +149,8 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             //Generate XML an Safe XML And File with the Same GUID
             var mDataItem = new MetadataItem
             {
-                Bezeichnung = _bezeichnung.ToUpper(),
-                Benutzer = _benutzer.ToUpper(),
+                Bezeichnung = _bezeichnung,
+                Benutzer = _benutzer,
                 Typ = _selectedTypItem.ToString(),
                 ValutaDatum = _valutaDatum.Value,
                 Guid = Guid.NewGuid(),

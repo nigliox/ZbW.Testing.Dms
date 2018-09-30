@@ -14,7 +14,7 @@ using ZbW.Testing.Dms.Client.Services;
 
 namespace ZbW.Testing.Dms.Client.ViewModels
 {
-    internal class SearchViewModel : BindableBase
+    public class SearchViewModel : BindableBase
     {
         private ObservableCollection<MetadataItem> _filteredMetadataItems;
 
@@ -109,6 +109,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
             {
                 MessageBox.Show("Das File wurde nicht gefunden");
                 throw e;
+                
             }
         }
 
@@ -117,7 +118,10 @@ namespace ZbW.Testing.Dms.Client.ViewModels
            
             if (_suchbegriff == null && _selectedTypItem == null)
             {
-                MessageBox.Show("Überprüfen Sie Ihre Eingabe");
+                
+                
+                var msg = new MessageBoxTestable();
+                msg.ShowMessage("Es muss mind. ein Suchbegriff oder ein Typ angewählt werden");
                 return;
             }
 
@@ -134,8 +138,7 @@ namespace ZbW.Testing.Dms.Client.ViewModels
                 return;
             }
 
-           
-                FilteredMetadataItems = MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff, _selectedTypItem);
+            FilteredMetadataItems = MetaDataService.SearchItemsByKeywordAndTyp(_suchbegriff, _selectedTypItem);
         }
 
         private void OnCmdReset()
